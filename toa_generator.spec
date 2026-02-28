@@ -4,8 +4,9 @@
 import os
 import importlib
 
-# Locate customtkinter assets for bundling
+# Locate package assets for bundling
 ctk_path = os.path.dirname(importlib.import_module("customtkinter").__file__)
+pdfminer_path = os.path.dirname(importlib.import_module("pdfminer").__file__)
 
 a = Analysis(
     ["run_gui.py"],
@@ -13,6 +14,8 @@ a = Analysis(
     binaries=[],
     datas=[
         (ctk_path, "customtkinter"),
+        # pdfminer CMap data files — required for PDF text extraction
+        (os.path.join(pdfminer_path, "cmap"), os.path.join("pdfminer", "cmap")),
     ],
     hiddenimports=[
         "customtkinter",
