@@ -6,10 +6,15 @@ Upload → Review → Generate → Settings
 
 from __future__ import annotations
 
+import webbrowser
+
 import customtkinter as ctk
 
 from app.models import TOAProject
-from gui.theme import BG_DARK, BG_DARKER, FONT_BODY, PRIMARY, TEXT_PRIMARY
+from gui.theme import (
+    BG_DARK, BG_DARKER, FONT_BODY, FONT_SMALL, FONT_TINY,
+    PRIMARY, TEXT_DIM, TEXT_PRIMARY,
+)
 from gui.tabs.upload_tab import UploadTab
 from gui.tabs.review_tab import ReviewTab
 from gui.tabs.generate_tab import GenerateTab
@@ -38,6 +43,7 @@ class TOAGeneratorApp(ctk.CTk):
         # Layout
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
+        self.grid_rowconfigure(1, weight=0)
 
         # Tab view
         self.tabview = ctk.CTkTabview(
@@ -79,6 +85,35 @@ class TOAGeneratorApp(ctk.CTk):
             self.tabview.tab("Settings"),
         )
         self.settings_tab.pack(fill="both", expand=True)
+
+        # --- Donate bar ---
+        donate_bar = ctk.CTkFrame(self, fg_color=BG_DARKER, height=36, corner_radius=0)
+        donate_bar.grid(row=1, column=0, sticky="ew")
+        donate_bar.grid_columnconfigure(0, weight=1)
+
+        donate_inner = ctk.CTkFrame(donate_bar, fg_color="transparent")
+        donate_inner.place(relx=0.5, rely=0.5, anchor="center")
+
+        ctk.CTkLabel(
+            donate_inner,
+            text="Enjoy TOA Generator?",
+            font=ctk.CTkFont(size=FONT_TINY),
+            text_color=TEXT_DIM,
+        ).pack(side="left", padx=(0, 6))
+
+        ctk.CTkButton(
+            donate_inner,
+            text="Donate via PayPal",
+            width=130,
+            height=26,
+            font=ctk.CTkFont(size=FONT_TINY, weight="bold"),
+            fg_color="#0070ba",
+            hover_color="#005ea6",
+            corner_radius=4,
+            command=lambda: webbrowser.open(
+                "https://www.paypal.com/donate/?hosted_button_id=MKDZZSD929VZG"
+            ),
+        ).pack(side="left")
 
         # Start on Upload tab
         self.tabview.set("Upload")
